@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Savollar{% endblock %}
+{% block content %}
+<h3 class="mb-3">Talabalar savollari</h3>
+<table class="table table-bordered bg-white align-middle">
+    <thead><tr><th>Foydalanuvchi</th><th>Savol</th><th>Javob</th><th>Holat</th><th class="text-end">Amal</th></tr></thead>
+    <tbody>
+    {% for msg in rows %}
+        <tr>
+            <td>{{ msg.user }}</td>
+            <td>{{ msg.message }}</td>
+            <td>{{ msg.admin_reply|default:"—" }}</td>
+            <td>
+                {% if msg.is_answered %}<span class="badge bg-success">javob berilgan</span>
+                {% else %}<span class="badge bg-warning text-dark">javobsiz</span>{% endif %}
+            </td>
+            <td class="text-end text-muted small">{% if not msg.is_answered %}pastda javob yozing{% endif %}</td>
+        </tr>
+        {% if not msg.is_answered %}
+        <tr>
+            <td colspan="5">
+                <form method="post" action="{% url 'panel:support_message_reply' msg.pk %}">
+                    {% csrf_token %}
+                    <div class="mb-2">
+                        <textarea name="admin_reply" class="form-control" rows="3" placeholder="Javobingizni yozing..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-success">Yuborish</button>
+                </form>
+            </td>
+        </tr>
+        {% endif %}
+    {% empty %}
+        <tr><td colspan="5" class="text-muted">Hozircha savollar yo‘q.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

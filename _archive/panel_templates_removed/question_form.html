@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<h3 class="mb-3">{{ title }}</h3>
+{% if bank_status %}
+    <div class="alert {% if bank_status.ready %}alert-success{% else %}alert-warning{% endif %}">
+        Bu darsda {{ bank_status.count }}/10 yaroqli savol bor.
+        {% if not bank_status.ready %}Test ishlashi uchun kamida 10 ta to‘g‘ri javobli savol kerak.{% endif %}
+    </div>
+{% endif %}
+<form method="post" class="bg-white p-4 border rounded">
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="mb-3">
+            <label class="form-label">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}<div class="text-danger small">{{ field.errors }}</div>{% endif %}
+        </div>
+    {% endfor %}
+
+    <hr>
+    <h5>Javoblar (aynan bitta to‘g‘ri javob belgilang)</h5>
+    {{ formset.management_form }}
+    {% for aform in formset %}
+        <div class="row align-items-center mb-2">
+            <div class="col-6">{{ aform.text }}</div>
+            <div class="col-2 text-center">{{ aform.is_correct }} <label class="small">to‘g‘ri</label></div>
+            <div class="col-2">{{ aform.order }}</div>
+            <div class="col-2">{% if aform.instance.pk %}{{ aform.DELETE }} <label class="small">o‘chirish</label>{% endif %}</div>
+            {{ aform.id }}
+        </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-primary mt-3">Saqlash</button>
+</form>
+{% endblock %}

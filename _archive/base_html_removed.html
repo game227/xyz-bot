@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="uz">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Boshqaruv paneli{% endblock %} — XYZ Bot</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+{% if user.is_authenticated %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'panel:dashboard' %}">XYZ Bot — Boshqaruv</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link" href="{% url 'panel:subject_list' %}">Fanlar</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'panel:course_list' %}">Kurslar</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'panel:module_list' %}">Modullar</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'panel:topic_list' %}">Mavzular</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'panel:lesson_list' %}">Darslar</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'panel:question_list' %}">Savollar</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'panel:subscription_requests' %}">Obuna so‘rovlari</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'panel:live_control' %}">Jonli efir</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'panel:support_messages' %}">Savollar</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'panel:stats' %}">Statistika</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'panel:user_list' %}">Foydalanuvchilar</a></li>
+            </ul>
+            <span class="navbar-text text-white-50 me-3">{{ user.get_full_name|default:user.username }} ({{ user.get_role_display }})</span>
+            <a class="btn btn-outline-light btn-sm" href="{% url 'panel:logout' %}">Chiqish</a>
+        </div>
+    </div>
+</nav>
+{% endif %}
+<div class="container py-4">
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }}">{{ message }}</div>
+    {% endfor %}
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}O‘chirish{% endblock %}
+{% block content %}
+<h3 class="mb-3">O‘chirishni tasdiqlang</h3>
+<p>Haqiqatan ham "<strong>{{ object }}</strong>" o‘chirilsinmi? Bu amalni ortga qaytarib bo‘lmaydi.</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Ha, o‘chirish</button>
+    <a href="javascript:history.back()" class="btn btn-outline-secondary">Bekor qilish</a>
+</form>
+{% endblock %}

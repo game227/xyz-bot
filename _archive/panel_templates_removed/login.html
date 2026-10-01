@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Kirish{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <h3 class="mb-3">Boshqaruv paneliga kirish</h3>
+        <form method="post">
+            {% csrf_token %}
+            {% if form.errors %}<div class="alert alert-danger">Login yoki parol noto‘g‘ri.</div>{% endif %}
+            <div class="mb-3">
+                <label class="form-label">Login</label>
+                {{ form.username }}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Parol</label>
+                {{ form.password }}
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Kirish</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

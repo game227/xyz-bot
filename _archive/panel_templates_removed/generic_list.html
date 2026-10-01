@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>{{ title }}</h3>
+    {% if add_url %}<a href="{% url add_url %}" class="btn btn-primary">+ Qo‘shish</a>{% endif %}
+</div>
+
+{% if rows %}
+<table class="table table-bordered bg-white align-middle">
+    <thead><tr><th>Nomi</th><th>Holat</th><th class="text-end">Amallar</th></tr></thead>
+    <tbody>
+    {% for row in rows %}
+        <tr>
+            <td>{{ row }}</td>
+            <td>{% if row.is_active %}<span class="badge bg-success">faol</span>{% else %}<span class="badge bg-secondary">nofaol</span>{% endif %}</td>
+            <td class="text-end">
+                {% if edit_url %}<a href="{% url edit_url row.pk %}" class="btn btn-sm btn-outline-primary">Tahrirlash</a>{% endif %}
+                {% if delete_url %}<a href="{% url delete_url row.pk %}" class="btn btn-sm btn-outline-danger">O‘chirish</a>{% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% if is_paginated %}
+<nav>
+    <ul class="pagination">
+        {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>{% endif %}
+        <li class="page-item disabled"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+        {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>{% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% else %}
+<p class="text-muted">Hozircha yozuvlar yo‘q.</p>
+{% endif %}
+{% endblock %}

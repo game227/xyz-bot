@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Foydalanuvchilar{% endblock %}
+{% block content %}
+<h3 class="mb-3">Foydalanuvchilar</h3>
+<table class="table table-bordered bg-white align-middle">
+    <thead><tr><th>Ism</th><th>Login</th><th>Rol</th><th>Telefon</th><th>Telegram</th><th></th></tr></thead>
+    <tbody>
+    {% for row in rows %}
+        <tr>
+            <td>{{ row.get_full_name|default:"—" }}</td>
+            <td>{{ row.username }}</td>
+            <td>{{ row.get_role_display }}</td>
+            <td>{{ row.phone_number|default:"—" }}</td>
+            <td>{% if row.telegram_id %}✅{% else %}—{% endif %}</td>
+            <td><a href="{% url 'panel:user_detail' row.pk %}" class="btn btn-sm btn-outline-primary">Ko‘rish</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% if is_paginated %}
+<nav>
+    <ul class="pagination">
+        {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>{% endif %}
+        <li class="page-item disabled"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+        {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>{% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}

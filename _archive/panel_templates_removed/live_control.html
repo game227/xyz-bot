@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Jonli efir{% endblock %}
+{% block content %}
+<h3 class="mb-3">Jonli efirni boshqarish</h3>
+{% if session %}
+    <div class="alert alert-danger">🔴 Jonli: <strong>{{ session.title }}</strong> ({{ session.get_platform_display }})<br>{{ session.stream_url }}</div>
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="end">
+        <button class="btn btn-outline-danger">Efirni tugatish</button>
+    </form>
+{% else %}
+    <form method="post" class="bg-white p-4 border rounded" style="max-width: 640px;">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="start">
+        {% for field in form %}
+            <div class="mb-3">
+                <label class="form-label">{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endfor %}
+        <button class="btn btn-primary">Efirni boshlash</button>
+    </form>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Obuna so‘rovlari{% endblock %}
+{% block content %}
+<h3 class="mb-3">Obuna so‘rovlari</h3>
+<table class="table table-bordered bg-white align-middle">
+    <thead><tr><th>Foydalanuvchi</th><th>Tarif (kun)</th><th>Izoh</th><th>Holat</th><th class="text-end">Amallar</th></tr></thead>
+    <tbody>
+    {% for req in rows %}
+        <tr>
+            <td>{{ req.user }}</td>
+            <td>{{ req.plan_days }}</td>
+            <td>{{ req.note|default:"—" }}</td>
+            <td>
+                {% if req.status == "NEW" %}<span class="badge bg-warning text-dark">yangi</span>
+                {% elif req.status == "DONE" %}<span class="badge bg-success">bajarildi</span>
+                {% else %}<span class="badge bg-secondary">rad etildi</span>{% endif %}
+            </td>
+            <td class="text-end">
+                {% if req.status == "NEW" %}
+                <form method="post" action="{% url 'panel:subscription_request_approve' req.pk %}" class="d-inline">
+                    {% csrf_token %}<button class="btn btn-sm btn-success">Tasdiqlash</button>
+                </form>
+                <form method="post" action="{% url 'panel:subscription_request_reject' req.pk %}" class="d-inline">
+                    {% csrf_token %}<button class="btn btn-sm btn-outline-danger">Rad etish</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

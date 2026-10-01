@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Bosh sahifa{% endblock %}
+{% block content %}
+<h3 class="mb-4">Bosh sahifa</h3>
+
+<div class="row mb-4 g-3">
+    <div class="col-md-3"><div class="card p-3"><div class="text-muted small">Fanlar</div><div class="fs-3">{{ stats.subjects }}</div></div></div>
+    <div class="col-md-3"><div class="card p-3"><div class="text-muted small">Video darslar</div><div class="fs-3">{{ stats.lessons }}</div></div></div>
+    <div class="col-md-3"><div class="card p-3"><div class="text-muted small">O‘quvchilar</div><div class="fs-3">{{ stats.students }}</div></div></div>
+    <div class="col-md-3"><div class="card p-3"><div class="text-muted small">Faol obunalar</div><div class="fs-3">{{ stats.active_subscriptions }}</div></div></div>
+</div>
+
+{% if live_session %}
+<div class="alert alert-danger">🔴 Hozir jonli efir bor: <strong>{{ live_session.title }}</strong> ({{ live_session.host }}) — <a href="{% url 'panel:live_control' %}">boshqarish</a></div>
+{% endif %}
+
+<h5>Yangi obuna so‘rovlari</h5>
+{% if pending_requests %}
+<table class="table table-bordered bg-white">
+    <thead><tr><th>Foydalanuvchi</th><th>Tarif (kun)</th><th>Izoh</th><th></th></tr></thead>
+    <tbody>
+    {% for req in pending_requests %}
+        <tr>
+            <td>{{ req.user }}</td>
+            <td>{{ req.plan_days }}</td>
+            <td>{{ req.note|default:"—" }}</td>
+            <td><a href="{% url 'panel:subscription_requests' %}" class="btn btn-sm btn-outline-primary">Ko‘rish</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="text-muted">Yangi so‘rovlar yo‘q.</p>
+{% endif %}
+{% endblock %}
